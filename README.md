@@ -52,8 +52,11 @@ n8n-automation-projects/
 
 ---
 
-## 📸 Screenshots (Optional)
-Add screenshots of your n8n workflows here to make the repo more visual.  
+## 📸 Screenshots 
+<img width="934" height="479" alt="image" src="https://github.com/user-attachments/assets/010febb2-0bc4-47b4-83e4-8c36794878d1" />
+
+<img width="815" height="536" alt="image" src="https://github.com/user-attachments/assets/7a5ab2f5-d236-42a5-9250-a521273de46c" />
+
 
 ---
 
