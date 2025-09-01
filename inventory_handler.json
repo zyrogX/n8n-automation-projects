@@ -1,0 +1,245 @@
+{
+  "name": "inventory_handler",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "authentication": "basicAuth",
+        "initialMessages": "Hi there! 👋\nMy name is Iftikhar. How can I assist you today?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6f67b18b-4283-4a97-b0df-00363b2de95f",
+      "name": "When chat message received",
+      "webhookId": "0ddcc508-c698-4219-989c-7ad7954735f9",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "eWF4UAiehJv5EexE",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "d106e8d2-4b3a-4586-8ce9-1c5ce869f30c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        80,
+        208
+      ],
+      "id": "8994e099-71e7-4195-9492-aa0de20700ea",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "ssTNJLBlD5IckJu4",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "b87d3b99-1eed-4ea2-b2da-be9da235ba52",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1QkZn3bDaqMcSvCVfKZfTpfkl_mJbuVeGqazBEhUpP0g",
+          "mode": "list",
+          "cachedResultName": "n8n_test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QkZn3bDaqMcSvCVfKZfTpfkl_mJbuVeGqazBEhUpP0g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QkZn3bDaqMcSvCVfKZfTpfkl_mJbuVeGqazBEhUpP0g/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        496,
+        192
+      ],
+      "id": "ff2b56b8-476a-4848-9091-983371b9412b",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "FQOzuFWhbW0r54BK",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1QkZn3bDaqMcSvCVfKZfTpfkl_mJbuVeGqazBEhUpP0g",
+          "mode": "list",
+          "cachedResultName": "n8n_test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QkZn3bDaqMcSvCVfKZfTpfkl_mJbuVeGqazBEhUpP0g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QkZn3bDaqMcSvCVfKZfTpfkl_mJbuVeGqazBEhUpP0g/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "item_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('item_name__using_to_match_', ``, 'string') }}",
+            "quantity_in_stock": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('quantity_in_stock', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "item_name"
+          ],
+          "schema": [
+            {
+              "id": "item_name",
+              "displayName": "item_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "quantity_in_stock",
+              "displayName": "quantity_in_stock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        368,
+        208
+      ],
+      "id": "051203f2-37b4-4c20-925a-ba34292f08c0",
+      "name": "Update_inventory",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "FQOzuFWhbW0r54BK",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update_inventory": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "649f0f2d-c642-4156-9a02-e6f0e4c40a83",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "33bb697ff8cf6cc6bfddd28374f45a5265f99ca32e67ec546037b81aeb81c068"
+  },
+  "id": "ghHT23WTil6PVlKx",
+  "tags": []
+}
