@@ -1,0 +1,237 @@
+{
+  "name": "Gmail_responder",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMonth"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c5134b5f-e86e-4eea-accb-735e1ea6ecad",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "k8M6XxGjxW5DUCqc",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.text }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "=hiring",
+              "description": "Messages where someone expresses interest in offering me a job, internship, freelance work, or project opportunity. Includes phrases like 'we want to hire you,' 'can you work with us,' 'job offer,' or 'looking to hire you for a task/project."
+            },
+            {
+              "category": "High Priority",
+              "description": "high Priority emails often include Urgent , Fast  and similar words"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "4627c1de-c58a-4104-96ee-c5bc0e484a38",
+      "name": "Text Classifier"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        304,
+        224
+      ],
+      "id": "38142ea9-52bf-41c7-9d39-7665644a34e7",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "ssTNJLBlD5IckJu4",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Task:\nYou are an AI assistant that responds to emails about hiring me for internships or jobs. Generate a polite, professional, and customized reply that acknowledges the sender’s interest, expresses enthusiasm, and highlights my skills and projects.\n\nContext about me:\n\nName: Muhammad Iftikhar\n\nEmail: ifeeinai@gmail.com\n\nPhone: +92 305 4992947\n\nLinkedIn: linkedin.com/in/zyrog\n\nGitHub: github.com/zyrogX\n\nMy Skills:\n\nAI & Machine Learning: Deep Learning, NLP, Computer Vision\n\nFrameworks & Tools: FastAPI, AgenticAI, LangChain, LangFlow\n\nProgramming: Python, SQL/MySQL\n\nFrontend: Flutter (for AI-driven apps)\n\nMy Projects:\n\nAI-Driven Call Audit System – Automates auditing and analysis of call center conversations.\n\nResume Screener & Job Recommendation Tool – Extracts skills and matches resumes with suitable job roles.\n\nAI-Powered Study Assistant – Generates quizzes and summaries from user notes.\n\nFace Recognition System – Built with FaceNet embeddings for accurate identification.\n\nResponse Guidelines:\n\nStart with a polite thank-you for reaching out.\n\nConfirm interest in the internship/job opportunity.\n\nBriefly introduce my expertise in AI and related tools.\n\nMention a few key projects as proof of hands-on experience.\n\nAsk for details about the role, responsibilities, or next steps.\n\nSign off professionally with my name and contact details.\n\nTone:\n\nProfessional, clear, and enthusiastic.\n\nAdapt depending on whether the sender is a company (more formal) or a startup/freelancer (slightly casual but still professional).\n\nThe email to Respond is: \n {{ $json.text }}\n\nin proper email format",
+              "role": "system"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        560,
+        -64
+      ],
+      "id": "13ce4039-e8a5-463e-ac98-8659624461b6",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "ssTNJLBlD5IckJu4",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ $json.message.content.email_response.subject }}",
+        "message": "={{ $json.message.content.email_response.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        912,
+        -16
+      ],
+      "id": "568fd3bf-64dc-47cd-bc22-986a43bdc976",
+      "name": "Create a draft",
+      "webhookId": "48b25d16-7064-458a-9198-0b3fa05c1f7c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "k8M6XxGjxW5DUCqc",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are a Helpful Assistant and Your job is to Respond to the following email:"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        816,
+        384
+      ],
+      "id": "e31d94bd-16e4-4534-88c7-c67b0fb57270",
+      "name": "Message a model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "ssTNJLBlD5IckJu4",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Create a draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e5ec71c5-8090-4f9a-a51a-2520f96c5dcd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "33bb697ff8cf6cc6bfddd28374f45a5265f99ca32e67ec546037b81aeb81c068"
+  },
+  "id": "KZqjzBOP6i7ABZoe",
+  "tags": []
+}
